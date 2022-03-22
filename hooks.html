@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VueJs</title>
+    <style>
+        body{
+            padding: 10px;
+        }
+      .box1 {
+        background-color: red;
+        width: 200px;
+        height: 200px;
+      }
+      .box2 {
+        background-color: royalblue;
+        width: 200px;
+        height: 200px;
+      }
+      .box3 {
+        background-color: aqua;
+        width: 200px;
+        height: 200px;
+      }
+      .box {
+        background-color: rgb(88, 87, 82);
+        width: 200px;
+        height: 200px;
+      }
+      [v-cloak] {
+        display: none;
+      }
+      input{
+          margin: 10px;
+          display: block;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div id="app" v-cloak>
+  
+      <button @click="isVisible = !isVisible">Toggle Button</button>
+      <hr />
+      <text-box v-if="isVisible" />
+    </div>
+  </body>
+  <!-- <script src=""></script> -->
+  <!--<script src="https://unpkg.com/vue@next"></script> -->
+  <script src="https://unpkg.com/vue@next"></script>
+  <script>
+    let app = Vue.createApp({
+      data: function () {
+        return {
+          isVisible: false,
+        };
+      },
+      methods: {
+        buttonBox() {
+          this.isVisible = !this.isVisible;
+        }
+      },
+      updated(){
+          console.log("updated")
+        }
+    });
+    app.component("text-box", {
+      template: `
+       <div class="box"></div>
+        `,
+        created(){
+          console.log("created")
+          
+        },
+        mounted(){
+          console.log("Mounted")
+          
+        },
+        unmounted(){
+          
+          console.log("UnMounted")
+        }
+    });
+   
+    app.mount("#app");
+  </script>
+</html>

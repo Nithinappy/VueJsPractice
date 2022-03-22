@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VueJs</title>
+    <style>
+        body{
+            padding: 10px;
+        }
+      .box1 {
+        background-color: red;
+        width: 200px;
+        height: 200px;
+      }
+      .box2 {
+        background-color: royalblue;
+        width: 200px;
+        height: 200px;
+      }
+      .box3 {
+        background-color: aqua;
+        width: 200px;
+        height: 200px;
+      }
+      .box {
+        background-color: rgb(88, 87, 82);
+        width: 200px;
+        height: 200px;
+      }
+      [v-cloak] {
+        display: none;
+      }
+      input{
+          margin: 10px;
+          display: block;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div id="app" v-cloak>
+    <!-- <custom-nav/> -->
+      <custom-form />
+      <h1>{{greetings}} <input v-model="greetings" /></h1>
+      <hr />
+
+      <div class="box1" v-if="isVisible">Box1</div>
+      <div class="box2" v-else-if="isVisible2">Box2</div>
+      <div class="box3" v-else>Box3</div>
+
+      <hr />
+      <button @click="isVisibleBox = !isVisibleBox">Toggle Button</button>
+      <hr />
+      <div class="box" v-if="isVisibleBox">Box</div>
+
+      <hr />
+      <button @click="buttonBox">Toggle Method Button</button>
+      <hr />
+      <div class="box" v-if="isVisibleBox">Box</div>
+    </div>
+  </body>
+  <!-- <script src=""></script> -->
+  <!--<script src="https://unpkg.com/vue@next"></script> -->
+  <script src="https://unpkg.com/vue@next"></script>
+  <script>
+    let app = Vue.createApp({
+      data: function () {
+        return {
+          greetings: "hello VueJs How are you",
+          isVisible: false,
+          isVisible2: false,
+          isVisibleBox: true,
+        };
+      },
+      methods: {
+        buttonBox() {
+          this.isVisibleBox = !this.isVisibleBox;
+        },
+      },
+    });
+    app.component("custom-form", {
+      template: `
+        <form @submit.prevent="handleSubmit">
+            <p v-for="str in inputs" :key="str">{{str}}</p>
+            <h1>{{title}}</h1>
+            <custom-input v-model="email" v-bind:label="emailLabel"/>
+            <custom-input v-model="password" :label="passwordLabel"/>
+            <button>Login</button>
+         </form>   
+        `,
+        data(){
+            return{
+                title:'Login',
+                inputs:['Within','Snafu','Deeps'],
+                email:'',
+                password:'',
+                emailLabel:'Email',
+                passwordLabel:"Password"
+            }
+        },
+        methods:{
+            handleSubmit(){
+                // e.preventDefault()
+                console.log(this.email,this.password)
+                console.log('submitted')
+            }
+        }
+    });
+    app.component("custom-nav", {
+      template: `
+      <nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+        <a class="navbar-brand" href="#">WebSiteName</a>
+        </div>
+        <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="#">Page 1</a></li>
+        <li><a href="#">Page 2</a></li>
+        <li><a href="#">Page 3</a></li>
+        </ul>
+    </div>
+</nav>
+        `
+       
+    });
+    app.component('custom-input',{
+        template:`
+        <label>
+            {{label}}
+            <input type="text" v-model="inputValue">
+         </label>`,
+        props:['label','modelValue'],
+        computed:{
+            inputValue:{
+                get(){
+                        return this.modelValue
+                },
+                set(value){
+                    console.log(value)
+                    this.$emit('update:modelValue',value)
+
+                }
+            }
+        }
+        // data(){
+        //     return {
+        //         inputValue:''
+        //     }
+        // } 
+    })
+    app.mount("#app");
+  </script>
+</html>
